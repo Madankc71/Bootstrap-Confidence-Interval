@@ -1,0 +1,70 @@
+---
+title: "bootstrap"
+author: "MADAN"
+date: "4/15/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readr)
+fuel_consumptions <- read_csv("fuel-consumptions.csv")
+fuel_consumptions
+```
+```{r}
+library(dplyr)
+df <- fuel_consumptions %>% select(CO2Rating,SmogRating)
+df
+```
+```{r}
+
+install.packages('boot',dep=TRUE)
+library(boot)
+```
+
+```{r}
+function_1 <- function(df, i){
+ d2 <- df[i,] 
+ return(cor(d2$CO2Rating, d2$SmogRating))
+}
+```
+
+```{r}
+set.seed(1)
+bootstrap_correlation <- boot(df,function_1,R=10000)
+```
+
+```{r}
+bootstrap_correlation
+```
+```{r}
+summary(bootstrap_correlation)
+
+```
+```{r}
+class(bootstrap_correlation)
+
+```
+
+```{r}
+range(bootstrap_correlation$t)
+
+```
+
+```{r}
+mean(bootstrap_correlation$t)
+
+```
+
+```{r}
+sd(bootstrap_correlation$t)
+
+```
+
+
+
+
